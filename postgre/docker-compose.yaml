@@ -1,0 +1,28 @@
+version: "3"
+services:
+  postgres:
+    container_name: postgres_container
+    image: "postgres:11.5"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    volumes:
+      - "./data:/var/lib/postgresql/data"
+    ports:
+      - "5432:5432"
+    networks:
+      postgres-dev:
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: docker.io/bitnami/phppgadmin:7
+    environment:
+      - DATABASE_HOST=postgres
+    ports:
+      - '8080:8080'
+      - '8443:8443'
+    networks:
+      - postgres-dev
+    restart: unless-stopped
+networks:
+  postgres-dev:
